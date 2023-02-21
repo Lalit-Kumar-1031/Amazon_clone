@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:amazon_clone/Resources/AuthenticationMethod.dart';
 import 'package:amazon_clone/utils/constansts.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:amazon_clone/widgets/CustomMainButton.dart';
@@ -17,6 +20,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController=TextEditingController();
   final addressController=TextEditingController();
   final passwordController=TextEditingController();
+
+  AuthenticationMethod authenticationMethod=AuthenticationMethod();
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -91,7 +97,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       child:const  Text("Sign Up",style: TextStyle(fontSize: 17),),
                                       color: Colors.orange,
                                       isLoading: false,
-                                      onPressed: (){}),
+                                      onPressed: ()async{
+                                       String output= await authenticationMethod.signUpUser(
+                                            name: nameController.text,
+                                            address: addressController.text,
+                                            email: emailController.text,
+                                            password: passwordController.text);
+
+                                       if(output=="success") {
+                                         print('Do Next Step !');
+
+                                         }
+                                       else{
+                                         Utils().showSnackBar(context: context, content:output);
+                                       }
+
+
+
+                                      }),
                                 ),
                               ],
                             )
