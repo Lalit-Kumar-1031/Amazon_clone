@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:amazon_clone/Screens/SignInScreen.dart';
+import 'package:amazon_clone/Screens/SignUpScreen.dart';
 import 'package:amazon_clone/utils/constansts.dart';
 import 'package:amazon_clone/utils/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,12 +17,26 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    Timer.periodic(const Duration(seconds: 4),(timer){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignInScreen(),));
-    });
+    final auth = FirebaseAuth.instance;
+
+    final user = auth.currentUser;
+
+
+    if (user != null)
+    {
+      Timer(Duration(seconds: 5), () {
+        //Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) =>InsertScreen()));
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => SignUpScreen(),));
+      });
+    }
+    else
+    {
+      Timer(Duration(seconds: 5), () {
+        Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) =>SignInScreen()));
+      });
+    }
 
   }
 

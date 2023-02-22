@@ -1,3 +1,4 @@
+import 'package:amazon_clone/Resources/AuthenticationMethod.dart';
 import 'package:amazon_clone/Screens/SignUpScreen.dart';
 import 'package:amazon_clone/utils/constansts.dart';
 import 'package:amazon_clone/utils/utils.dart';
@@ -15,6 +16,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final emailcontroller=TextEditingController();
   final passwordController=TextEditingController();
+  AuthenticationMethod authenticationMethod=AuthenticationMethod();
+  bool isLoading=false;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -69,8 +72,30 @@ class _SignInScreenState extends State<SignInScreen> {
                               child: CustomMainButton(
                                   child:const  Text("Sign In",style: TextStyle(fontSize: 17),),
                                   color: Colors.orange,
-                                  isLoading: false,
-                                  onPressed: (){}),
+                                  isLoading: isLoading,
+                                  onPressed: () async{
+
+                                    setState(() {
+                                      isLoading=true;
+                                    });
+
+                                    String output=await authenticationMethod.signInUser(email: emailcontroller.text, password: passwordController.text);
+
+                                    setState(() {
+                                      isLoading=false;
+                                    });
+
+                                    if(output=="success"){
+                                      //code for next step
+                                      Utils().showSnackBar(context: context, content:"Successfull");
+                                    }
+                                    else {
+                                      Utils().showSnackBar(context: context, content: output);
+
+                                      }
+                                    emailcontroller.clear();
+                                    passwordController.clear();
+                                  }),
                             ),
                           ],
                         )
@@ -90,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           color: Colors.grey[400]!,
                           isLoading: false,
                           onPressed: (){
-                            Navigator.push(context,MaterialPageRoute(builder: (context) =>const  SignUpScreen(),));
+                            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) =>const  SignUpScreen(),));
                           }),
                       SizedBox(height: 20,),
                     ],

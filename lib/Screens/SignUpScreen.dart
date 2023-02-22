@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:amazon_clone/Resources/AuthenticationMethod.dart';
+import 'package:amazon_clone/Screens/SignInScreen.dart';
 import 'package:amazon_clone/utils/constansts.dart';
 import 'package:amazon_clone/utils/utils.dart';
 import 'package:amazon_clone/widgets/CustomMainButton.dart';
@@ -22,6 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final passwordController=TextEditingController();
 
   AuthenticationMethod authenticationMethod=AuthenticationMethod();
+  bool isLoading=false;
 
   @override
   void dispose() {
@@ -77,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   title: "Address",
                                   hintText: "Enter Address here",
                                   controller: addressController,
-                                  obscureText: true,
+                                  obscureText: false,
                                 ),
                                 TextFieldWidget(
                                   title: "Email",
@@ -96,21 +98,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   child: CustomMainButton(
                                       child:const  Text("Sign Up",style: TextStyle(fontSize: 17),),
                                       color: Colors.orange,
-                                      isLoading: false,
+                                      isLoading: isLoading,
                                       onPressed: ()async{
+
+                                        setState(() {
+                                          isLoading=true;
+                                        });
+
                                        String output= await authenticationMethod.signUpUser(
                                             name: nameController.text,
                                             address: addressController.text,
                                             email: emailController.text,
                                             password: passwordController.text);
 
-                                       if(output=="success") {
-                                         print('Do Next Step !');
+                                       setState(() {
+                                         isLoading=false;
+                                       });
 
+                                       if(output=="success") {
+                                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) =>const  SignInScreen(),));
                                          }
                                        else{
                                          Utils().showSnackBar(context: context, content:output);
                                        }
+                                       emailController.clear();
+                                       passwordController.clear();
+                                       addressController.clear();
+                                       nameController.clear();
 
 
 
@@ -126,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         color: Colors.grey[400]!,
                         isLoading: false,
                         onPressed: (){
-                          Navigator.pop(context);
+                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) =>const  SignInScreen(),));
 
                         }),
                     SizedBox(height: 20,),

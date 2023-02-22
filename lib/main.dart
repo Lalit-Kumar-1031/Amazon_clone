@@ -1,7 +1,10 @@
+import 'package:amazon_clone/Layouts/Screen_Layout.dart';
+import 'package:amazon_clone/Screens/SignInScreen.dart';
 import 'package:amazon_clone/Screens/SplashScreen.dart';
 import 'package:amazon_clone/utils/colors_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main()async{
@@ -22,7 +25,22 @@ class AmazonClone extends StatelessWidget {
       theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor:backgroundColor,
       ),
-    home:const SplashScreen(),
+    home:StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, AsyncSnapshot <User?> user) {
+       if(user.connectionState==ConnectionState.waiting)
+         {
+           return const Center(child: CircularProgressIndicator(color: Colors.orange,));
+         }
+       else if(user.hasData) {
+        return const ScreenLayout();
+       }
+       else{
+         return const SignInScreen();
+       }
+
+      },
+    ),
     );
   }
 }
