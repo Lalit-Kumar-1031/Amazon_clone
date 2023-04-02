@@ -1,4 +1,5 @@
 import 'package:amazon_clone/Screens/SearchScreen.dart';
+import 'package:amazon_clone/Screens/SplashScreen.dart';
 import 'package:amazon_clone/utils/colors_theme.dart';
 import 'package:amazon_clone/utils/constansts.dart';
 import 'package:amazon_clone/utils/utils.dart';
@@ -70,7 +71,9 @@ class SearchBarWidget extends StatelessWidget with PreferredSizeWidget {
                 ),
               ),
           ),
-          IconButton(onPressed: (){}, icon:const  Icon(Icons.mic_none_outlined),),
+          IconButton(onPressed: (){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>SplashScreen() ,));
+          }, icon:const  Icon(Icons.mic_none_outlined),),
         ],
       ),
     );

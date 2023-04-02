@@ -1,3 +1,4 @@
+import 'package:amazon_clone/Layouts/Screen_Layout.dart';
 import 'package:amazon_clone/Resources/AuthenticationMethod.dart';
 import 'package:amazon_clone/Screens/SignUpScreen.dart';
 import 'package:amazon_clone/utils/constansts.dart';
@@ -88,6 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     if(output=="success"){
                                       //code for next step
                                       Utils().showSnackBar(context: context, content:"Successfull");
+                                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => ScreenLayout(),));
                                     }
                                     else {
                                       Utils().showSnackBar(context: context, content: output);
